@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxia con Música</title>
+    <style>
+        /* Estilos originales de tu galaxia */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+        /* Estilo para un pequeño aviso visual (opcional) */
+        #instrucciones {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-family: sans-serif;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="instrucciones">Haz clic para activar el sonido</div>
+
+    <canvas id="canvas"></canvas>
+
+    <audio id="musica" loop>
+        <source src="Álvaro Díaz - Reina Pepiada - AMV.mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+    </audio>
+
+    <script>
+        // --- LÓGICA DE LA GALAXIA (Adaptada de tu archivo original) ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, stars = [];
+
+        function init() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2,
+                    speed: Math.random() * 0.5
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'white';
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                star.y += star.speed;
+                if (star.y > height) star.y = 0;
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        draw();
+
+        // --- LÓGICA DE AUDIO ---
+        const audio = document.getElementById('musica');
+        const texto = document.getElementById('instrucciones');
+
+        window.addEventListener('click', () => {
+            audio.play();
+            // Desvanecer el texto de instrucciones
+            texto.style.display = 'none';
+        }, { once: true }); // Solo se activa una vez
+    </script>
+</body>
+</html>
